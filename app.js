@@ -10,7 +10,9 @@ var width = 1;
 var height = 40;
 var maxX = width - 1;
 var maxY = height - 1;
+var springStiffness = .1;
 
+//The Z's measure how much the field is distorted
 var zs = [];
 forEachRow(function (y) {
     zs[y] = [];
@@ -23,7 +25,7 @@ forEachPoint(function (y, x) {
 var velocities = zs;
 var forces = zs;
 
-zs[20][0] = 20;
+zs[20][0] = 100;
 
 function forEachPoint(callback) {
     for (var y = 0; y < height; y++) {
@@ -48,15 +50,15 @@ function calculateForce(y, x) {
     if (y < maxY) {
         bottom = z - zs[y + 1][x];
     }
-    if (x < 0) {
-        left = z - zs[y][x - 1];
-    }
-    if (x < maxX) {
-        right = z - zs[y][x + 1];
-    }
+//    if (x < 0) {
+//        left = z - zs[y][x - 1];
+//    }
+//    if (x < maxX) {
+//        right = z - zs[y][x + 1];
+//    }
 //    console.log(top,right,bottom,left);
     //Divide by 2 to share the force across the spring
-    forces[y][x] = (top + right + bottom + left) / 2 / 10
+    forces[y][x] = (top + right + bottom + left) / 2 * springStiffness
 }
 
 function applyForce(y, x) {
